@@ -1,0 +1,4 @@
+repository "gugen_stay@timeflies404@cloud"
+  path "/"
+    br "/main"
+    co "/main"
