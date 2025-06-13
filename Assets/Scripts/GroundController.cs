@@ -57,31 +57,37 @@ public class GroundController : MonoBehaviour
     // 지면 데이터 시각화
     private void OnDrawGizmosSelected()
     {
-        // 콜라이더 시각화
-        Collider2D collider = GetComponent<Collider2D>();
-        if (collider != null)
+        // 에디터에서만 그리고, 디버그 모드일 때만 표시
+        #if UNITY_EDITOR
+        if (Application.isPlaying && Debug.isDebugBuild)
         {
-            Gizmos.color = new Color(0, 1, 0, 0.3f); // 반투명 녹색
-            
-            // 콜라이더 유형에 따라 다르게 시각화
-            if (collider is BoxCollider2D)
+            // 콜라이더 시각화
+            Collider2D collider = GetComponent<Collider2D>();
+            if (collider != null)
             {
-                BoxCollider2D boxCollider = collider as BoxCollider2D;
-                Vector3 center = transform.TransformPoint(boxCollider.offset);
-                Vector3 size = new Vector3(
-                    boxCollider.size.x * transform.lossyScale.x,
-                    boxCollider.size.y * transform.lossyScale.y,
-                    0.1f
-                );
-                Gizmos.DrawCube(center, size);
-            }
-            else if (collider is CircleCollider2D)
-            {
-                CircleCollider2D circleCollider = collider as CircleCollider2D;
-                Vector3 center = transform.TransformPoint(circleCollider.offset);
-                float radius = circleCollider.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y);
-                Gizmos.DrawSphere(center, radius);
+                Gizmos.color = new Color(0, 1, 0, 0.3f); // 반투명 녹색
+                
+                // 콜라이더 유형에 따라 다르게 시각화
+                if (collider is BoxCollider2D)
+                {
+                    BoxCollider2D boxCollider = collider as BoxCollider2D;
+                    Vector3 center = transform.TransformPoint(boxCollider.offset);
+                    Vector3 size = new Vector3(
+                        boxCollider.size.x * transform.lossyScale.x,
+                        boxCollider.size.y * transform.lossyScale.y,
+                        0.1f
+                    );
+                    Gizmos.DrawCube(center, size);
+                }
+                else if (collider is CircleCollider2D)
+                {
+                    CircleCollider2D circleCollider = collider as CircleCollider2D;
+                    Vector3 center = transform.TransformPoint(circleCollider.offset);
+                    float radius = circleCollider.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y);
+                    Gizmos.DrawSphere(center, radius);
+                }
             }
         }
+        #endif
     }
 } 

@@ -393,11 +393,17 @@ public class PlayerMovement : MonoBehaviour
     // 디버깅용 시각화
     private void OnDrawGizmosSelected()
     {
-        if (groundCheck != null)
+        // 에디터에서만 그리고, 디버그 모드일 때만 표시
+        #if UNITY_EDITOR
+        if (Application.isPlaying && Debug.isDebugBuild)
         {
-            // 지면 체크 영역 표시
-            Gizmos.color = isGrounded ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            if (groundCheck != null)
+            {
+                // 지면 체크 영역 표시
+                Gizmos.color = isGrounded ? Color.green : Color.red;
+                Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            }
         }
+        #endif
     }
 }

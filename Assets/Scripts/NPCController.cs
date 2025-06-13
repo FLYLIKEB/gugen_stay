@@ -188,8 +188,14 @@ public class NPCController : MonoBehaviour
     // 디버그용 시각화
     private void OnDrawGizmosSelected()
     {
-        // 상호작용 가능 거리 표시
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactionDistance);
+        // 에디터에서만 그리고, 디버그 모드일 때만 표시
+        #if UNITY_EDITOR
+        if (Application.isPlaying && Debug.isDebugBuild)
+        {
+            // 상호작용 가능 거리 표시
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, interactionDistance);
+        }
+        #endif
     }
 } 
