@@ -1,0 +1,86 @@
+# Unity generated files
+Library/
+Temp/
+Logs/
+MemoryCaptures/
+obj/
+Build/
+Builds/
+UserSettings/
+
+# Unity cache files
+*.pidb
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity ignore files
+*.unityproj
+*.sln
+*.csproj
+*.pidb
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Visual Studio cache files
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Jetbrains
+*.iml
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~ 
