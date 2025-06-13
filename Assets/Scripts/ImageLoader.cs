@@ -9,7 +9,7 @@ public class ImageLoader : MonoBehaviour
     public void LoadAndDisplayImage(string characterName)
     {
         // NPCData에서 캐릭터 이름에 해당하는 데이터 찾기
-        var npcData = DefaultTable.NPCData.GetList().Find(npc => npc.displayName == characterName);
+        var npcData = DefaultTable.NPCData.GetList().Find(npc => npc.key == characterName);
         Debug.Log($"npcData: {npcData}");
 
         if (npcData != null)

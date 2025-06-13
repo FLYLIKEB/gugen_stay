@@ -10,7 +10,7 @@ using GoogleSheet;
 using System.IO;
 using GoogleSheet.Type;
 using System.Reflection;
-
+using DefaultTable;
 
 public class DialogueSystem : MonoBehaviour
 {
@@ -25,9 +25,9 @@ public class DialogueSystem : MonoBehaviour
     public int currentDialogueIndex = 1000; // 현재 대화 인덱스
     public ImageLoader imageLoader; // 캐릭터 이미지 로더
 
-    private Queue<DefaultTable.ScriptData> dialogues; // 대화 내용을 저장할 큐
-    private List<DefaultTable.ScriptData> scriptDatas; // 스크립트 데이터 리스트
+    private Queue<ScriptData> dialogues; // 대화 내용을 저장할 큐
     private bool isDialogueActive; // 대화창 활성 상태
+    private string currentSpeaker;
 
     private void Awake()
     {
@@ -60,7 +60,7 @@ public class DialogueSystem : MonoBehaviour
 
     private void Initialize()
     {
-        dialogues = new Queue<DefaultTable.ScriptData>(); // 대화 큐 초기화
+        dialogues = new Queue<ScriptData>(); // 대화 큐 초기화
         dialoguePanel.SetActive(true); // 대화창 활성화
         isDialogueActive = false; // 대화 활성 상태 초기화
     }
@@ -68,7 +68,7 @@ public class DialogueSystem : MonoBehaviour
     private void LoadDialogues()
     {
         DefaultTable.ScriptData.Load(); // Google Sheets에서 데이터 로드
-        scriptDatas = new List<DefaultTable.ScriptData>(DefaultTable.ScriptData.ScriptDataList); // 데이터 리스트 초기화
+        var scriptDatas = new List<DefaultTable.ScriptData>(DefaultTable.ScriptData.ScriptDataList); // 데이터 리스트 초기화
 
         Debug.Log($"총 로드된 대화 개수: {scriptDatas.Count}");
 
@@ -80,7 +80,7 @@ public class DialogueSystem : MonoBehaviour
         }
 
         Debug.Log($"필터링된 대화 개수: {filteredDatas.Count}");
-        InitiateDialogue(filteredDatas); // 대화 시작
+        StartDialogue(filteredDatas[0].name, filteredDatas); // 대화 시작
     }
 
     private void RegisterButtonEvents()
@@ -96,21 +96,24 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    private void InitiateDialogue(List<DefaultTable.ScriptData> newDialogues)
+    public void StartDialogue(string speaker, List<ScriptData> scriptDataList)
     {
-        if (newDialogues == null || newDialogues.Count == 0)
+        if (scriptDataList == null || scriptDataList.Count == 0)
         {
-            Debug.LogError("빈 리스트로 대화를 시작할 수 없습니다.");
+            Debug.LogError("대화 데이터가 없습니다.");
             return;
         }
 
-        dialogues.Clear(); // 기존 대화 큐 초기화
-        foreach (var dialogue in newDialogues)
-            dialogues.Enqueue(dialogue); // 새로운 대화 추가
+        currentSpeaker = speaker;
+        dialogues.Clear();
+        foreach (var dialogue in scriptDataList)
+        {
+            dialogues.Enqueue(dialogue);
+        }
 
-        isDialogueActive = true; // 대화 활성화
-        dialoguePanel.SetActive(true); // 대화창 활성화
-        DisplayDialogue(dialogues.Peek()); // 첫 번째 대화 출력
+        isDialogueActive = true;
+        dialoguePanel.SetActive(true);
+        DisplayNextDialogue();
     }
 
     public void DisplayNextDialogue()
@@ -132,7 +135,8 @@ public class DialogueSystem : MonoBehaviour
 
         DisplayDialogue(currentDialogue); // 일반 대화 출력
     }
-    private void DisplayDialogue(DefaultTable.ScriptData script)
+
+    private void DisplayDialogue(ScriptData script)
     {
         if (script == null)
         {
@@ -144,7 +148,7 @@ public class DialogueSystem : MonoBehaviour
         DisplayCharacterImage(script.name); // 캐릭터 이미지 출력
     }
 
-    private void DisplayChoiceDialogue(DefaultTable.ScriptData choiceDialogue)
+    private void DisplayChoiceDialogue(ScriptData choiceDialogue)
     {
         EndDialogue(); // 대화 종료
 
@@ -173,7 +177,6 @@ public class DialogueSystem : MonoBehaviour
 
         choice1Button.onClick.AddListener(() => MoveToScene(choiceDialogue.property[0]));
         choice2Button.onClick.AddListener(() => MoveToScene(choiceDialogue.property[1]));
-
     }
 
     public void MoveToScene(int sceneIndex)
@@ -207,5 +210,6 @@ public class DialogueSystem : MonoBehaviour
         dialoguePanel.SetActive(false); // 대화창 비활성화
     
         Debug.Log("대화가 종료되었습니다.");
+        dialogues.Clear();
     }
 }

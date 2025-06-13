@@ -397,6 +397,7 @@
 "Assets/Scripts/Editor/AnimatorSetup.cs"
 "Assets/Scripts/Editor/InventoryUIGenerator.cs"
 "Assets/Scripts/Editor/JumpAnimationFixer.cs"
+"Assets/Scripts/Editor/KoreanFontSetup.cs"
 "Assets/Scripts/Editor/LayerSetup.cs"
 "Assets/Scripts/Editor/TextureGenerator.cs"
 -langversion:9.0

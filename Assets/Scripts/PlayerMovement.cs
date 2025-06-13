@@ -267,15 +267,25 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("E키 입력 감지");
-            // 아이템 상호작용 범위 내의 아이템 검사
+            // 아이템 상호작용 범위 내의 오브젝트 검사
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1.5f);
             Debug.Log($"감지된 콜라이더 수: {colliders.Length}");
             
             foreach (Collider2D collider in colliders)
             {
                 Debug.Log($"감지된 오브젝트: {collider.gameObject.name}, 태그: {collider.gameObject.tag}");
-                // 아이템 태그를 가진 오브젝트 확인
-                if (collider.CompareTag("Item"))
+                
+                // NPC와 상호작용
+                if (collider.CompareTag("NPC"))
+                {
+                    NPCController npc = collider.GetComponent<NPCController>();
+                    if (npc != null)
+                    {
+                        npc.StartDialogue();
+                    }
+                }
+                // 아이템 상호작용
+                else if (collider.CompareTag("Item"))
                 {
                     // 아이템 정보 가져오기
                     ItemObject itemObject = collider.GetComponent<ItemObject>();
@@ -308,9 +318,6 @@ public class PlayerMovement : MonoBehaviour
         
         // 원래 값 무효화
         isGrounded = false;
-        
-        // 디버그 정보 수집
-        string collidersInfo = "";
         
         // 모든 콜라이더를 확인 (레이어 필터링 없이)
         Collider2D[] allColliders = Physics2D.OverlapCircleAll(groundCheck.position, groundCheckRadius);
